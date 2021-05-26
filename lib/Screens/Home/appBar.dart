@@ -31,10 +31,14 @@ class _AppBarHomeState extends State<AppBarHome> {
   void checklogin() async{
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     if(sharedPreferences.getString("token")!=null) {
-      _isLogged=true;
+      setState(() {
+        _isLogged=true;
+      });
     }
     else {
-      _isLogged=false;
+      setState(() {
+        _isLogged=false;
+      });
     }
   }
 

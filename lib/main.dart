@@ -1,13 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:review_app/Screens/Home/homeScreen.dart';
 import 'package:review_app/Screens/Welcome/welcome.dart';
 import 'package:review_app/constants.dart';
 
+import 'package:shared_preferences/shared_preferences.dart';
 void main() {
-  runApp(MyApp());
+  String? _token="";
+  WidgetsFlutterBinding.ensureInitialized();
+  SharedPreferences.getInstance().then((instance) {
+    _token = instance.getString("token");
+    final _loggedIn = _token != null && _token != "";
+    runApp(MyApp(loggedIn: _loggedIn));
+  });
 }
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
+  final bool loggedIn;
+
+  MyApp({ required this.loggedIn});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -17,7 +28,7 @@ class MyApp extends StatelessWidget {
         primaryColor: PrimaryColor,
         scaffoldBackgroundColor: Colors.white,
       ),
-      home: Welcome(),
+      home: loggedIn ? HomeScreen() : Welcome(),
     );
   }
 }

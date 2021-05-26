@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:review_app/Models/ProductsData.dart';
+import 'package:review_app/Screens/Home/appBar.dart';
 import 'package:review_app/Screens/Login/loginScreen.dart';
 import 'package:review_app/Screens/Welcome/welcome.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -36,6 +37,7 @@ class _BodyState extends State<Body> {
   }
   void checklogin() async{
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    print(sharedPreferences.getString("token"));
     if(sharedPreferences.getString("token")!=null) {
       _isLogged=true;
     }
@@ -47,7 +49,6 @@ class _BodyState extends State<Body> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
-
       body: FutureBuilder(
         future: getProducts(),
         builder: (BuildContext context, AsyncSnapshot<List<Product>> snapshot) {
