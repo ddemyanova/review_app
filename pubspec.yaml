@@ -31,13 +31,15 @@ dependencies:
 
   flutter_svg: ^0.17.4
 
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
   http: ^0.13.3
   shared_preferences: ^2.0.5
   fluttertoast: ^8.0.7
-
+  smooth_star_rating: ^1.1.1
+  image_picker: ^0.7.5+3
 
 
 # For information on the generic Dart part of this file, see the

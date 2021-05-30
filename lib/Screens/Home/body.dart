@@ -1,8 +1,11 @@
+import 'dart:ffi';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:review_app/Models/ProductsData.dart';
 import 'package:review_app/Screens/Home/appBar.dart';
 import 'package:review_app/Screens/Login/loginScreen.dart';
+import 'package:review_app/Screens/Review/reviewScreen.dart';
 import 'package:review_app/Screens/Welcome/welcome.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -45,6 +48,8 @@ class _BodyState extends State<Body> {
       _isLogged=false;
     }
   }
+
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -64,63 +69,33 @@ class _BodyState extends State<Body> {
                   left: 0,
                   child: Image.asset("assets/images/bg.jpg"),
                 ),
-                Positioned(
-                  top: 0,
-                  height: 100,
-                  child: AppBar(
-
-                  title: Text("Products"),
-
-                  actions: [
-                    IconButton(
-                      onPressed: (){
-                        setState(() {
-                          logOut();
-                        });
-                      },
-                      icon: Icon(
-                          Icons.login
-                      ),
-                    )
-                  ],
-                ),
-                ),
 
                 ListView(
-                children: products!
-                    .map(
+                children: products!.map(
                       (Product product) => Card(
+
                         margin: EdgeInsets.all(10.0),
 
                         child:Column(
+
                           children: <Widget>[
                             ListTile(
-
+                              onTap: () {
+                                Navigator.push(context,
+                                    MaterialPageRoute(builder: (context) {
+                                      return ReviewScreen(product: product);
+                                    }));
+                              },
+                              leading: Container(
+                                child: Image.network(URL_IMG+product.Image),
+                              ),
                               contentPadding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
                               title: Text(product.Title),
-                              subtitle: Text("${product.Text}"),
+                              trailing:  Icon(
+                                  Icons.download_rounded,
+                                color: _isLogged? PrimaryColor: Colors.black54,
                               ),
-                            Container(
-                              child: Image.network(URL_IMG+product.Image),
-                              padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
-
-                            ),
-                            if(_isLogged)
-                            Container(
-                              padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(30),
-                                child: TextButton(
-                                    onPressed: () {},
-                                    style: TextButton.styleFrom(
-                                        textStyle: const TextStyle(fontSize: 16),
-                                        backgroundColor: PrimaryColor,
-                                        fixedSize: Size(240, 50)),
-                                    child:
-                                    Text("DOWNLOAD", style: TextStyle(color: Colors.white))),
-                              )
-                            )
-
+                              ),
 
                           ],
                         )   ,

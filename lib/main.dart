@@ -16,7 +16,6 @@ void main() {
 
 class MyApp extends StatelessWidget {
   final bool loggedIn;
-
   MyApp({ required this.loggedIn});
 
   @override

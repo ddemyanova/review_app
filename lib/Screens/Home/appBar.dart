@@ -1,6 +1,7 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:review_app/Screens/Profile/profileScreen.dart';
 import 'package:review_app/Screens/Welcome/welcome.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -28,6 +29,13 @@ class _AppBarHomeState extends State<AppBarHome> {
             (Route<dynamic> route) => false);
 
   }
+
+  void OpenProfile(){
+    Navigator.push(context,
+        MaterialPageRoute(builder: (context) {
+          return ProfileScreen();
+        }));
+  }
   void checklogin() async{
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     if(sharedPreferences.getString("token")!=null) {
@@ -53,6 +61,16 @@ class _AppBarHomeState extends State<AppBarHome> {
           title: Text("Products"),
 
           actions: [
+            IconButton(
+              onPressed: (){
+                setState(() {
+                  OpenProfile();
+                });
+              },
+              icon: Icon(
+                  Icons.account_circle
+              ),
+            ),
             IconButton(
               onPressed: (){
                 logOut();
