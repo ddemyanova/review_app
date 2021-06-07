@@ -16,13 +16,13 @@ class _BodyState extends State<Body> {
 
   TextEditingController nameController = new TextEditingController();
   TextEditingController lastNameController = new TextEditingController();
-  late PickedFile _image;
+  String path ="";
   bool img=false;
 
   PickImage() async{
     var image = await ImagePicker.platform.pickImage(source: ImageSource.gallery);
     setState(() {
-      _image = image as PickedFile;
+      path= image!.path;
       img=true;
     });
   }
@@ -43,8 +43,8 @@ class _BodyState extends State<Body> {
     setState(() {
       nameController.text = preferences.getString('name')!;
       lastNameController.text = preferences.getString('lastName')!;
-      if(preferences.getString('image')!=null){
-        _image= new PickedFile(preferences.getString('image')!);
+      if(preferences.getString('image')!=""){
+        path= preferences.getString('image')!;
         img=true;
       }
     });
@@ -129,7 +129,7 @@ class _BodyState extends State<Body> {
               top:370,
               child:   CircleAvatar(
                 radius: 50,
-                backgroundImage: img ? FileImage(File(_image.path)) :
+                backgroundImage: img ? FileImage(File(path)) :
                 Image.asset("assets/images/avatar.png").image,
               )
           ),
@@ -159,7 +159,7 @@ class _BodyState extends State<Body> {
                 borderRadius: BorderRadius.circular(30),
                 child: TextButton(
                     onPressed: () {
-                      SaveInfo(nameController.text, lastNameController.text, _image.path);
+                      SaveInfo(nameController.text, lastNameController.text, path);
                     },
                     style: TextButton.styleFrom(
                         textStyle: const TextStyle(fontSize: 16),

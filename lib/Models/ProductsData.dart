@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:review_app/Models/Database.dart';
 
 class Product{
   int Id;
@@ -12,6 +15,7 @@ class Product{
     required this.Text,
   });
   factory Product.fromJson(Map<String, dynamic> json) {
+
     return Product(
       Id: json['id'] as int,
       Image: json['img'] as String,
@@ -19,4 +23,19 @@ class Product{
       Text: json['text'] as String,
     );
   }
+  Map<String, dynamic> toMap()=> {
+    'id': Id,
+    'image': Image,
+    'title': Title,
+    'text': Text
+  };
+  factory Product.fromMap(Map<String, dynamic> map) {
+   return Product(
+    Id:map['id'],
+    Image: map['image'],
+    Title: map['title'],
+    Text : map['text']
+   );
+  }
 }
+

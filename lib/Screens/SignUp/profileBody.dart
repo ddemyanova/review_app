@@ -1,6 +1,4 @@
-
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:review_app/Screens/Home/homeScreen.dart';
 import '../../constants.dart';
@@ -16,18 +14,22 @@ class _BodyState extends State<Body> {
 
   TextEditingController nameController = new TextEditingController();
   TextEditingController lastNameController = new TextEditingController();
-  late PickedFile _image ;
+  //late PickedFile _image ;
+  String path="";
   bool img=false;
 
   PickImage() async{
     var image = await ImagePicker.platform.pickImage(source: ImageSource.gallery);
     setState(() {
       print(image!.path);
-      _image = image as PickedFile;
+      path=image.path;
+      //_image = image as PickedFile;
       img=true;
     });
   }
+
   SaveInfo(String name, String lastName, String path) async{
+    print("saved");
     SharedPreferences preferences = await SharedPreferences.getInstance();
     preferences.setString('name', name);
     preferences.setString('lastName', lastName);
@@ -39,7 +41,6 @@ class _BodyState extends State<Body> {
             (Route<dynamic> route) => false);
 
   }
-
   @override
   void initState(){
     super.initState();
@@ -54,10 +55,9 @@ class _BodyState extends State<Body> {
       child: Stack(
         alignment: Alignment.center,
         children: <Widget>[
-
           //name field
           Positioned(
-              top:300,
+              top:240,
               child: Container(
                 width: 300,
                 height: 50,
@@ -82,7 +82,7 @@ class _BodyState extends State<Body> {
 
           //last name field
           Positioned(
-              top:360,
+              top:310,
               child: Container(
                 width: 300,
                 height: 50,
@@ -105,18 +105,17 @@ class _BodyState extends State<Body> {
 
           //avatar field
           Positioned(
-            top:450,
+            top:400,
               child: CircleAvatar(
                 radius: 50,
-                backgroundImage: img ? FileImage(File(_image.path)) :
+                backgroundImage: img ? FileImage(File(path)) :
                 Image.asset("assets/images/avatar.png").image,
               ),
           ),
 
-
           //avatar button
           Positioned(
-              top: 570,
+              top: 520,
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(30),
                 child: TextButton(
@@ -132,12 +131,14 @@ class _BodyState extends State<Body> {
               )),
 
           Positioned(
-              top: 650,
+              top: 600,
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(30),
                 child: TextButton(
                     onPressed: () {
-                      SaveInfo(nameController.text, lastNameController.text, _image.path);
+                      final String name =nameController.text;
+                      final String surname =lastNameController.text;
+                      SaveInfo(name, surname, path);
                     },
                     style: TextButton.styleFrom(
                         textStyle: const TextStyle(fontSize: 16),
@@ -146,6 +147,21 @@ class _BodyState extends State<Body> {
                     child:
                     Text("SAVE", style: TextStyle(color: Colors.white))),
               )),
+          Positioned(
+              top: 670,
+              child: TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pushAndRemoveUntil(
+                        MaterialPageRoute(
+                            builder: (BuildContext context) => HomeScreen()
+                        ),
+                            (Route<dynamic> route) => false);
+                  },
+                  child: Text("Skip",
+                      style: TextStyle(color: Colors.black45, fontSize: 16)
+                  )
+              )
+          )
         ],
       ),
     );
