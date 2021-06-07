@@ -40,10 +40,7 @@ class _BodyState extends State<Body> {
   }
 
   AddReview(String review, int rate) async {
-    if (rate == 0) {
-      ShowToast("Add rate!");
-    }
-    else {
+
       var JsonData = null;
       SharedPreferences preferences = await SharedPreferences.getInstance();
       String? token = preferences.getString('token');
@@ -79,7 +76,7 @@ class _BodyState extends State<Body> {
           }
         });
       }
-    }
+
   }
    double _currentRating = 0;
    TextEditingController reviewController = new TextEditingController();
@@ -87,8 +84,10 @@ class _BodyState extends State<Body> {
   Widget build(BuildContext context) {
 
 
+    final  _isKeyboard=MediaQuery.of(context).viewInsets.bottom!=0;
     Size size = MediaQuery.of(context).size;
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: PrimaryLightColor,
       body: FutureBuilder(
         future: checkConn(),
@@ -113,10 +112,11 @@ class _BodyState extends State<Body> {
                           ),
 
                         ),
+                        !_isKeyboard?
                         Container(
                           child: Image.network(URL_IMG+product.Image),
                           height: 230,
-                        ),
+                        ): Container(),
                         Container(
                             child: Text(product.Text)
                         ),
