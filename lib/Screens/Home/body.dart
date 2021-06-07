@@ -186,8 +186,8 @@ class _BodyState extends State<Body> {
                                             color: _isLogged? PrimaryColor: Colors.black54),
                                         onPressed: () {
                                           if (_isLogged) {
-                                            DBProvider.db.deleteAll();
-                                            //downloadProduct(product);
+                                            //DBProvider.db.deleteAll();
+                                            downloadProduct(product);
                                           }
                                         },
 

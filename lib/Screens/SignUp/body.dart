@@ -189,7 +189,7 @@ class _BodyState extends State<Body> {
           ),
           //Signup
           Positioned(
-              top: 600,
+              top: 520,
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(30),
                 child: TextButton(
@@ -208,7 +208,7 @@ class _BodyState extends State<Body> {
               )),
           //go back
           Positioned(
-              top: 670,
+              top: 580,
               child: TextButton(
                   onPressed: () {Navigator.pop(context);},
                   child: Text("Go back",
