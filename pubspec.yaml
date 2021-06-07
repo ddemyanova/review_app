@@ -31,14 +31,22 @@ dependencies:
 
   flutter_svg: ^0.17.4
 
+
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
   http: ^0.13.3
-  shared_preferences: ^2.0.5
+  shared_preferences: ^2.0.6
   fluttertoast: ^8.0.7
-
-
+  smooth_star_rating: ^1.1.1
+  image_picker: ^0.7.5+3
+  sqflite: ^2.0.0+3
+  path_provider: any
+  connectivity: ^3.0.3
+  dio: ^4.0.0
+  image_gallery_saver: ^1.6.9
+  permission_handler: any
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

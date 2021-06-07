@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:review_app/Screens/Home/homeScreen.dart';
+import 'package:review_app/Screens/SignUp/profileScreen.dart';
 import 'package:review_app/Screens/Welcome/welcome.dart';
 import 'package:review_app/constants.dart';
 
@@ -17,51 +18,63 @@ class Body extends StatefulWidget {
 
 class _BodyState extends State<Body> {
   bool _isLoading = false;
-  Signup(String login, String password) async{
-    var JsonData=null;
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    Map data = {
-      "username": login,
-      "password": password
-    };
-    var response = await http.post(
-      Uri.parse(URL + "register/"),
-      body: data,
-    );
-    if(response.statusCode==201){
-      JsonData=json.decode(response.body);
-      if(JsonData!=null) {
+  Signup(String login, String password, String confirm) async{
+    if(password==confirm) {
+      var JsonData = null;
+      SharedPreferences preferences = await SharedPreferences.getInstance();
+      Map data = {
+        "username": login,
+        "password": password
+      };
+      var response = await http.post(
+        Uri.parse(URL + "register/"),
+        body: data,
+      );
+      if (response.statusCode == 201) {
+        JsonData = json.decode(response.body);
+        if (JsonData != null) {
+          setState(() {
+            _isLoading = false;
+            if (JsonData['token'] != null) {
+              preferences.setString("token", JsonData['token']);
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) {
+                    return ProfileScreen();
+                  }));
+            }
+            else {
+              ShowToast("Wrong login or password!");
+              setState(() {
+                _isLoading = false;
+              });
+            }
+          });
+        }
+      }
+      else {
+        ShowToast("Wrong login or password!");
         setState(() {
-          _isLoading=false;
-          if(JsonData['token']!=null) {
-            preferences.setString( "token", JsonData['token']);
-            Navigator.of(context).pushAndRemoveUntil(
-                MaterialPageRoute(
-                    builder: (BuildContext context)=>HomeScreen()
-                ),
-                    (Route<dynamic> route) => false);
-          }
-          else{
-            ShowToast("Wrong login or password!");
-            setState(() {
-              _isLoading = false;
-            });
-          }
+          _isLoading = false;
         });
+        print(response.body);
       }
     }
-    else {
-      ShowToast("Wrong login or password!");
+    else{
       setState(() {
         _isLoading = false;
       });
-      print(response.body);
+      ShowToast("Passwords are different!");
     }
   }
+
+  TextEditingController loginController = new TextEditingController();
+  TextEditingController passController = new TextEditingController();
+  TextEditingController passConfirmController = new TextEditingController();
+  bool _passObscure = true;
+  bool _passConfirmObscure = true;
+
   @override
   Widget build(BuildContext context) {
-    TextEditingController loginController = new TextEditingController();
-    TextEditingController passController = new TextEditingController();
     Size size = MediaQuery.of(context).size;
     return Container(
       height: size.height,
@@ -97,7 +110,7 @@ class _BodyState extends State<Body> {
           ),
           //Password field
           Positioned(
-              top:380,
+              top:360,
               child: Container(
                 width: 300,
                 height: 50,
@@ -110,7 +123,7 @@ class _BodyState extends State<Body> {
                 ),
                 child: TextField(
                   controller: passController,
-                  obscureText:true,
+                  obscureText:_passObscure,
                   decoration: InputDecoration(
                       icon: Icon(
                           Icons.vpn_key,
@@ -118,9 +131,56 @@ class _BodyState extends State<Body> {
                       ),
                       hintText: "Password",
                       border: InputBorder.none,
-                      suffixIcon: Icon(
-                          Icons.visibility,
+                      suffixIcon:IconButton(
+                        icon:Icon(
+                          _passObscure? Icons.visibility_off: Icons.visibility,
+                          color: PrimaryColor,
+                        ),
+                        onPressed: (){
+                          setState(() {
+                            _passObscure = !_passObscure;
+                          });
+                        },
+                      )
+                  ),
+                  onChanged: (value){},
+                ),
+              )
+          ),
+
+          //Pass confirm
+          Positioned(
+              top:420,
+              child: Container(
+                width: 300,
+                height: 50,
+                margin: EdgeInsets.symmetric(vertical: 10),
+                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                decoration: BoxDecoration(
+                  color:PrimaryLightColor,
+                  borderRadius: BorderRadius.circular(30),
+
+                ),
+                child: TextField(
+                  controller: passConfirmController,
+                  obscureText:_passConfirmObscure,
+                  decoration: InputDecoration(
+                      icon: Icon(
+                          Icons.vpn_key,
                           color: PrimaryColor
+                      ),
+                      hintText: "Password confirm",
+                      border: InputBorder.none,
+                      suffixIcon:IconButton(
+                        icon:Icon(
+                          _passConfirmObscure? Icons.visibility_off: Icons.visibility,
+                          color: PrimaryColor,
+                        ),
+                        onPressed: (){
+                          setState(() {
+                            _passConfirmObscure = !_passConfirmObscure;
+                          });
+                        },
                       )
                   ),
                   onChanged: (value){},
@@ -137,7 +197,7 @@ class _BodyState extends State<Body> {
                       setState(() {
                         _isLoading = true;
                       });
-                      Signup(loginController.text, passController.text);
+                      Signup(loginController.text, passController.text,passConfirmController.text);
                     },
                     style: TextButton.styleFrom(
                         textStyle: const TextStyle(fontSize: 16),

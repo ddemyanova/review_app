@@ -5,6 +5,7 @@ import 'package:review_app/Screens/SignUp/signupScreen.dart';
 import 'package:review_app/constants.dart';
 
 class Body extends StatelessWidget {
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;

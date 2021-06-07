@@ -167,7 +167,5 @@ class _BodyState extends State<Body> {
       print(response.body);
     }
   }
-  ShowLoginError(){
-  }
 }
 

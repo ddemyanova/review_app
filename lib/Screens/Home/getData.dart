@@ -2,15 +2,17 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:review_app/Models/Database.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../constants.dart';
 
 import '../../Models/ProductsData.dart';
 
-Future<List<Product>> getProducts() async {
+import 'package:connectivity/connectivity.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-  //SharedPreferences preferences = await SharedPreferences.getInstance();
+Future<List<Product>> getProducts() async {
 
   var response = await http.get(
       Uri.parse(URL + "products")
@@ -26,6 +28,17 @@ Future<List<Product>> getProducts() async {
   else
     {
     throw "Unable to read products.";
+    }
+}
+
+Future <bool> checkConn() async{
+  var connectivityResult = await (Connectivity().checkConnectivity());
+  if (connectivityResult == ConnectivityResult.none) {
+    return false;
+  }
+  else
+    {
+    return true;
     }
 }
 
