@@ -1,8 +1,11 @@
 # review_app
 
-A new Flutter project.
+A Flutter project.
 
 ## Getting Started
+!!
+Чтоб запустить проект нужно установить следующее значение:
+Run-> Edit Configurations-> Additional run args: --no-sound-null-safety
 
 This project is a starting point for a Flutter application.
 
