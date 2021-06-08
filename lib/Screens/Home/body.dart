@@ -183,9 +183,10 @@ class _BodyState extends State<Body> {
                                       trailing:  IconButton(
                                         icon: Icon(
                                             Icons.download_rounded,
-                                            color: _isLogged? PrimaryColor: Colors.black54),
+                                            color: (_isLogged & _isConnected)?
+                                            PrimaryColor : Colors.black54),
                                         onPressed: () {
-                                          if (_isLogged) {
+                                          if (_isLogged && _isConnected) {
                                             //DBProvider.db.deleteAll();
                                             downloadProduct(product);
                                           }

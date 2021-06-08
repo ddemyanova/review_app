@@ -87,7 +87,6 @@ class _BodyState extends State<Body> {
     final  _isKeyboard=MediaQuery.of(context).viewInsets.bottom!=0;
     Size size = MediaQuery.of(context).size;
     return Scaffold(
-      resizeToAvoidBottomInset: false,
       backgroundColor: PrimaryLightColor,
       body: FutureBuilder(
         future: checkConn(),
@@ -103,7 +102,8 @@ class _BodyState extends State<Body> {
                   if (snapshot.hasData)
                   {
                     List<Review>? reviews = snapshot.data;
-                    return Column(
+                    return Column
+                      (
                       children: <Widget>[
                         Container(
                           child: Text(
@@ -112,11 +112,10 @@ class _BodyState extends State<Body> {
                           ),
 
                         ),
-                        !_isKeyboard?
                         Container(
                           child: Image.network(URL_IMG+product.Image),
-                          height: 230,
-                        ): Container(),
+                          height: 180,
+                        ),
                         Container(
                             child: Text(product.Text)
                         ),
@@ -163,6 +162,11 @@ class _BodyState extends State<Body> {
                               child: TextButton(
 
                                   onPressed: () {
+                                    FocusScopeNode currentFocus = FocusScope.of(context);
+
+                                    if (!currentFocus.hasPrimaryFocus) {
+                                      currentFocus.unfocus();
+                                    }
                                     AddReview(reviewController.text, _currentRating.toInt());
                                   },
                                   style: TextButton.styleFrom(

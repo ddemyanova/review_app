@@ -1,6 +1,7 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:review_app/Models/Database.dart';
 import 'package:review_app/Screens/Profile/profileScreen.dart';
 import 'package:review_app/Screens/Welcome/welcome.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -61,6 +62,16 @@ class _AppBarHomeState extends State<AppBarHome> {
           title: Text("Products"),
 
           actions: [
+            IconButton(
+              onPressed: (){
+                setState(() {
+                  DBProvider.db.deleteAll();
+                });
+              },
+              icon: Icon(
+                  Icons.delete
+              ),
+            ),
             IconButton(
               onPressed: (){
                 setState(() {
