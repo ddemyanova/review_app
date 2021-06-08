@@ -70,13 +70,13 @@ class _BodyState extends State<Body> {
         alignment: Alignment.center,
         children: <Widget>[
           Positioned(
-            top:180,
+            top:100,
               left:70,
               child: Text("Name"),
           ),
           //name field
           Positioned(
-              top:200,
+              top:120,
               child: Container(
                 width: 300,
                 height: 50,
@@ -99,13 +99,13 @@ class _BodyState extends State<Body> {
               )
           ),
           Positioned(
-            top:280,
+            top:200,
             left:70,
             child: Text("Last name"),
           ),
           //last name field
           Positioned(
-              top:300,
+              top:220,
               child: Container(
                 width: 300,
                 height: 50,
@@ -126,7 +126,7 @@ class _BodyState extends State<Body> {
               )
           ),
           Positioned(
-              top:370,
+              top:330,
               child:   CircleAvatar(
                 radius: 50,
                 backgroundImage: img ? FileImage(File(path)) :
@@ -138,7 +138,7 @@ class _BodyState extends State<Body> {
 
           //avatar button
           Positioned(
-              top: 480,
+              top: 450,
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(30),
                 child: TextButton(
@@ -154,7 +154,7 @@ class _BodyState extends State<Body> {
               )),
 
           Positioned(
-              top: 600,
+              top: 550,
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(30),
                 child: TextButton(

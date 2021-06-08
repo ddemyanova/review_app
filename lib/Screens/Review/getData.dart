@@ -16,6 +16,7 @@ Future<List<Review>> getReviews(Product product) async {
   {
     List<dynamic> body = jsonDecode(response.body);
     List<Review> reviews = body.map((dynamic item) => Review.fromJson(item),).toList();
+    reviews.sort((a, b) => b.Id.compareTo(a.Id));
 
     return reviews;
   }
