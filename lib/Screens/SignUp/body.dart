@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:review_app/Screens/Home/homeScreen.dart';
 import 'package:review_app/Screens/SignUp/profileScreen.dart';
-import 'package:review_app/Screens/Welcome/welcome.dart';
 import 'package:review_app/constants.dart';
-
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
-
 import '../../components.dart';
 
 class Body extends StatefulWidget {
@@ -17,8 +13,8 @@ class Body extends StatefulWidget {
 }
 
 class _BodyState extends State<Body> {
-  bool _isLoading = false;
-  Signup(String login, String password, String confirm) async{
+
+  void signUp(String login, String password, String confirm) async{
     if(password==confirm) {
       var JsonData = null;
       SharedPreferences preferences = await SharedPreferences.getInstance();
@@ -56,7 +52,6 @@ class _BodyState extends State<Body> {
         setState(() {
           _isLoading = false;
         });
-        print(response.body);
       }
     }
     else{
@@ -67,6 +62,7 @@ class _BodyState extends State<Body> {
     }
   }
 
+  bool _isLoading = false;
   TextEditingController loginController = new TextEditingController();
   TextEditingController passController = new TextEditingController();
   TextEditingController passConfirmController = new TextEditingController();
@@ -76,145 +72,92 @@ class _BodyState extends State<Body> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+
     return Container(
       height: size.height,
       width: double.infinity,
-      child: _isLoading? Center(child: CircularProgressIndicator()): Stack(
-        alignment: Alignment.center,
+      child: _isLoading?
+      Center(child: CircularProgressIndicator()):
+      Column(
+        mainAxisAlignment:MainAxisAlignment.center,
         children: <Widget>[
           //Login field
-          Positioned(
-              top:300,
-              child: Container(
-                width: 300,
-                height: 50,
-                margin: EdgeInsets.symmetric(vertical: 10),
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-                decoration: BoxDecoration(
-                  color:PrimaryLightColor,
-                  borderRadius: BorderRadius.circular(30),
-
-                ),
-                child: TextField(
+           MainTextField(
                   controller: loginController,
-                  decoration: InputDecoration(
-                      hintText: "Login",
-                      icon: Icon(
-                          Icons.person,
-                          color: PrimaryColor
-                      ),
-                      border: InputBorder.none
+                  icon: Icon(
+                      Icons.person,
+                      color: PrimaryColor
                   ),
-                ),
-              )
-          ),
-          //Password field
-          Positioned(
-              top:360,
-              child: Container(
-                width: 300,
-                height: 50,
-                margin: EdgeInsets.symmetric(vertical: 10),
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-                decoration: BoxDecoration(
-                  color:PrimaryLightColor,
-                  borderRadius: BorderRadius.circular(30),
+                text:"Login"
+           ),
 
-                ),
-                child: TextField(
-                  controller: passController,
-                  obscureText:_passObscure,
-                  decoration: InputDecoration(
-                      icon: Icon(
-                          Icons.vpn_key,
-                          color: PrimaryColor
-                      ),
-                      hintText: "Password",
-                      border: InputBorder.none,
-                      suffixIcon:IconButton(
-                        icon:Icon(
-                          _passObscure? Icons.visibility_off: Icons.visibility,
-                          color: PrimaryColor,
-                        ),
-                        onPressed: (){
-                          setState(() {
-                            _passObscure = !_passObscure;
-                          });
-                        },
-                      )
-                  ),
-                  onChanged: (value){},
-                ),
-              )
+          //Password field
+          MainTextField(
+            suffixIcon:IconButton(
+              icon:Icon(
+                _passObscure? Icons.visibility_off: Icons.visibility,
+                color: PrimaryColor,
+              ),
+              onPressed: (){
+                setState(() {
+                  _passObscure = !_passObscure;
+                });
+              },
+            ),
+            obscure: _passObscure,
+            controller: passController,
+            text:"Password",
+            icon: Icon(
+                Icons.vpn_key,
+                color: PrimaryColor
+            ),
           ),
 
           //Pass confirm
-          Positioned(
-              top:420,
-              child: Container(
-                width: 300,
-                height: 50,
-                margin: EdgeInsets.symmetric(vertical: 10),
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-                decoration: BoxDecoration(
-                  color:PrimaryLightColor,
-                  borderRadius: BorderRadius.circular(30),
+          MainTextField(
+            suffixIcon:IconButton(
+              icon:Icon(
+                _passConfirmObscure? Icons.visibility_off: Icons.visibility,
+                color: PrimaryColor,
+              ),
+              onPressed: (){
+                setState(() {
+                  _passConfirmObscure = !_passConfirmObscure;
+                });
+              },
+            ),
+            obscure: _passConfirmObscure,
+            controller: passConfirmController,
+            text:"Password confirm",
+            icon: Icon(
+                Icons.vpn_key,
+                color: PrimaryColor
+            ),
+          ),
 
-                ),
-                child: TextField(
-                  controller: passConfirmController,
-                  obscureText:_passConfirmObscure,
-                  decoration: InputDecoration(
-                      icon: Icon(
-                          Icons.vpn_key,
-                          color: PrimaryColor
-                      ),
-                      hintText: "Password confirm",
-                      border: InputBorder.none,
-                      suffixIcon:IconButton(
-                        icon:Icon(
-                          _passConfirmObscure? Icons.visibility_off: Icons.visibility,
-                          color: PrimaryColor,
-                        ),
-                        onPressed: (){
-                          setState(() {
-                            _passConfirmObscure = !_passConfirmObscure;
-                          });
-                        },
-                      )
-                  ),
-                  onChanged: (value){},
-                ),
+          Container(
+              margin:  EdgeInsets.symmetric( vertical: 10),
+              child: MainButton(
+                press:() {
+                  setState(() {
+                    _isLoading = true;
+                  });
+                  signUp(loginController.text, passController.text,passConfirmController.text);
+                },
+                text:"SIGN UP",
+                backgroundColor: PrimaryColor,
               )
           ),
-          //Signup
-          Positioned(
-              top: 520,
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(30),
-                child: TextButton(
-                    onPressed: () {
-                      setState(() {
-                        _isLoading = true;
-                      });
-                      Signup(loginController.text, passController.text,passConfirmController.text);
-                    },
-                    style: TextButton.styleFrom(
-                        textStyle: const TextStyle(fontSize: 16),
-                        backgroundColor: PrimaryColor,
-                        fixedSize: Size(300, 50)),
-                    child:
-                    Text("SIGN UP", style: TextStyle(color: Colors.white))),
-              )),
           //go back
-          Positioned(
-              top: 580,
-              child: TextButton(
-                  onPressed: () {Navigator.pop(context);},
-                  child: Text("Go back",
-                      style: TextStyle(color: Colors.black45, fontSize: 16))))
+          LightButton(
+            press:() {Navigator.pop(context);},
+            text:"Go back",
+          ),
         ],
       ),
     );
   }
 }
+
+
+

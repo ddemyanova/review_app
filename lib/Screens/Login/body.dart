@@ -1,11 +1,7 @@
 import 'dart:convert';
-import 'dart:io';
-import 'dart:math';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:review_app/Screens/Home/homeScreen.dart';
-import 'package:review_app/Screens/Welcome/welcome.dart';
 import '../../components.dart';
 import '../../constants.dart';
 import 'package:http/http.dart' as http;
@@ -19,6 +15,7 @@ class Body extends StatefulWidget {
 
 class _BodyState extends State<Body> {
   bool _isLoading = false;
+  bool _passObscure=true;
   @override
   Widget build(BuildContext context) {
 
@@ -30,102 +27,66 @@ class _BodyState extends State<Body> {
       width: double.infinity,
       child:
       _isLoading? Center(child: CircularProgressIndicator()):
-      Stack(
-        alignment: Alignment.center,
+      Column(
+
+        mainAxisAlignment:MainAxisAlignment.center,
         children: <Widget>[
           //Login field
-          Positioned(
-              top:300,
-              child: Container(
-                width: 300,
-                height: 50,
-                margin: EdgeInsets.symmetric(vertical: 10),
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-                decoration: BoxDecoration(
-                  color:PrimaryLightColor,
-                  borderRadius: BorderRadius.circular(30),
-
-                ),
-                child: TextField(
-                  controller: loginController,
-                  decoration: InputDecoration(
-                      hintText: "Login",
-                      icon: Icon(
-                        Icons.person,
-                        color: PrimaryColor,
-                      ),
-                      border: InputBorder.none
-                  ),
-                ),
-              )
+          MainTextField(
+              controller: loginController,
+              icon: Icon(
+                  Icons.person,
+                  color: PrimaryColor
+              ),
+              text:"Login"
           ),
 
           //Password field
-          Positioned(
-              top:380,
-              child: Container(
-                width: 300,
-                height: 50,
-                margin: EdgeInsets.symmetric(vertical: 10),
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-                decoration: BoxDecoration(
-                  color:PrimaryLightColor,
-                  borderRadius: BorderRadius.circular(30),
-
-                ),
-                child: TextField(
-                  obscureText:true,
-                  controller: passController,
-                  decoration: InputDecoration(
-                      icon: Icon(
-                          Icons.vpn_key,
-                          color: PrimaryColor
-                      ),
-                      hintText: "Password",
-                      border: InputBorder.none,
-                      suffixIcon: Icon(
-                          Icons.visibility,
-                          color: PrimaryColor,
-
-                      ),
-
-                  ),
-                  onChanged: (value){},
-                ),
-              )
+          MainTextField(
+            suffixIcon:IconButton(
+              icon:Icon(
+                _passObscure? Icons.visibility_off: Icons.visibility,
+                color: PrimaryColor,
+              ),
+              onPressed: (){
+                setState(() {
+                  _passObscure = !_passObscure;
+                });
+              },
+            ),
+            obscure: _passObscure,
+            controller: passController,
+            text:"Password",
+            icon: Icon(
+                Icons.vpn_key,
+                color: PrimaryColor
+            ),
           ),
 
           //Button Login
-          Positioned(
-              top: 520,
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(30),
-                child: TextButton(
-                    onPressed: () {
-                      setState(() {
-                        _isLoading = true;
-                      });
-                      Login(loginController.text, passController.text);
-                    },
-                    style: TextButton.styleFrom(
-                        textStyle: const TextStyle(fontSize: 16),
-                        backgroundColor: PrimaryColor,
-                        fixedSize: Size(300, 50)),
-                    child:
-                    Text("LOGIN", style: TextStyle(color: Colors.white))),
-              )),
-          Positioned(
-              top: 580,
-              child: TextButton(
-                  onPressed: () {Navigator.pop(context);},
-                  child: Text("Go back",
-                      style: TextStyle(color: Colors.black45, fontSize: 16))))
+          Container(
+              margin:  EdgeInsets.symmetric( vertical: 20),
+              child: MainButton(
+                press:() {
+                  setState(() {
+                    _isLoading = true;
+                  });
+                  login(loginController.text, passController.text);
+                },
+                text:"Login",
+                backgroundColor: PrimaryColor,
+              ),
+          ),
+          LightButton(
+            press:() {Navigator.pop(context);},
+            text:"Go back",
+          ),
         ],
       ),
     );
   }
 
-  Login(String login, String password) async{
+  void login(String login, String password) async{
     var JsonData=null;
     SharedPreferences preferences = await SharedPreferences.getInstance();
     Map data = {
@@ -164,7 +125,6 @@ class _BodyState extends State<Body> {
         ShowToast("Wrong login or password!");
         _isLoading = false;
       });
-      print(response.body);
     }
   }
 }

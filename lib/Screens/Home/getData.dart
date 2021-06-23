@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:review_app/Models/Database.dart';
+import 'package:review_app/DataProvider/Database.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../constants.dart';

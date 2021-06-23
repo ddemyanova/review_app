@@ -6,12 +6,12 @@ import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:review_app/Models/Database.dart';
+import 'package:review_app/DataProvider/Database.dart';
 import 'package:review_app/Models/ProductsData.dart';
 import 'package:review_app/Screens/Home/appBar.dart';
 import 'package:review_app/Screens/Login/loginScreen.dart';
 import 'package:review_app/Screens/Review/reviewScreen.dart';
-import 'package:review_app/Models/Database.dart';
+import 'package:review_app/DataProvider/Database.dart';
 import 'package:review_app/Screens/Welcome/welcome.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../components.dart';
@@ -87,21 +87,6 @@ class _BodyState extends State<Body> {
     catch(e){
 
     }
-
-    // var response = await Dio().get(
-    //     'https://helpx.adobe.com/content/dam/help/en/stock/how-to/visual-reverse-image-search/jcr_content/main-pars/image/visual-reverse-image-search-v2_intro.jpg',
-    //     options: Options(responseType: ResponseType.bytes));
-    // final result = await ImageGallerySaver.saveImage(
-    //   Uint8List.fromList(response.data),
-    //   quality: 60,
-    //   name: 'file',
-    // );
-    //var imageId = await ImageDownloader.downloadImage("https://raw.githubusercontent.com/wiki/ko2ic/image_downloader/images/flutter.png");
-    // String path =  result['filePath'].toString().replaceFirst('file://', '');
-    // print("res: "+result.toString());
-    //print(imageId);
-    //product.Image=path;
-    //DBProvider.db.newProduct(product);
     setState(() {
     });
   }
