@@ -38,7 +38,7 @@ class MainButton extends StatelessWidget {
 class MainTextField extends StatelessWidget {
   const MainTextField({
     required this.controller,
-    required this.icon,
+    this.icon,
     required this.text,
     this.suffixIcon,
     this.obscure = false,
@@ -47,7 +47,7 @@ class MainTextField extends StatelessWidget {
   }) : super();
 
   final TextEditingController controller;
-  final Icon icon;
+  final Icon? icon;
   final String text;
   final IconButton? suffixIcon;
   final bool obscure;

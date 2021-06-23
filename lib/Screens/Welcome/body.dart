@@ -60,7 +60,8 @@ class Body extends StatelessWidget {
                       }));
                 },
                 text:"Skip",
-              ))
+              ),
+          )
         ],
       ),
     );

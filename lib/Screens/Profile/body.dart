@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:review_app/Screens/Home/homeScreen.dart';
+import '../../components.dart';
 import '../../constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:image_picker/image_picker.dart';
@@ -66,67 +67,24 @@ class _BodyState extends State<Body> {
     return Container(
       height: size.height,
       width: double.infinity,
-      child: Stack(
-        alignment: Alignment.center,
+      child: Column(
+
+        mainAxisAlignment:MainAxisAlignment.center,
         children: <Widget>[
-          Positioned(
-            top:100,
-              left:70,
-              child: Text("Name"),
-          ),
+
           //name field
-          Positioned(
-              top:120,
-              child: Container(
-                width: 300,
-                height: 50,
-                margin: EdgeInsets.symmetric(vertical: 10),
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-                decoration: BoxDecoration(
-                  color:PrimaryLightColor,
-                  borderRadius: BorderRadius.circular(30),
-
-                ),
-                child: TextField(
-                  controller: nameController,
-                  decoration: InputDecoration(
-                      hintText: "Name",
-                      border: InputBorder.none,
-
-                  ),
-
-                ),
-              )
+          MainTextField(
+              controller: nameController,
+              text:"Name"
           ),
-          Positioned(
-            top:200,
-            left:70,
-            child: Text("Last name"),
-          ),
+
           //last name field
-          Positioned(
-              top:220,
-              child: Container(
-                width: 300,
-                height: 50,
-                margin: EdgeInsets.symmetric(vertical: 10),
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-                decoration: BoxDecoration(
-                  color:PrimaryLightColor,
-                  borderRadius: BorderRadius.circular(30),
-
-                ),
-                child: TextField(
-                  controller: lastNameController,
-                  decoration: InputDecoration(
-                      hintText: "Last name",
-                      border: InputBorder.none
-                  ),
-                ),
-              )
-          ),
-          Positioned(
-              top:330,
+        MainTextField(
+            controller: lastNameController,
+            text:"Last name"
+        ),
+          Container(
+              margin:  EdgeInsets.symmetric( vertical: 10),
               child:   CircleAvatar(
                 radius: 50,
                 backgroundImage: img ? FileImage(File(path)) :
@@ -135,39 +93,35 @@ class _BodyState extends State<Body> {
           ),
           //avatar field
 
-
+          Container(
+            margin:  EdgeInsets.symmetric( vertical: 5),
+            child: LightButton(
+              press:() {
+                PickImage();
+              },
+              text:"Browse image",
+            ),
+          ),
           //avatar button
-          Positioned(
-              top: 450,
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(30),
-                child: TextButton(
-                    onPressed: () {
-                      PickImage();
-                    },
-                    style: TextButton.styleFrom(
-                        textStyle: const TextStyle(fontSize: 16),
-                        backgroundColor: PrimaryColor,
-                        fixedSize: Size(150, 50)),
-                    child:
-                    Text("Browse image", style: TextStyle(color: Colors.white))),
-              )),
-
-          Positioned(
-              top: 550,
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(30),
-                child: TextButton(
-                    onPressed: () {
-                      SaveInfo(nameController.text, lastNameController.text, path);
-                    },
-                    style: TextButton.styleFrom(
-                        textStyle: const TextStyle(fontSize: 16),
-                        backgroundColor: PrimaryColor,
-                        fixedSize: Size(300, 50)),
-                    child:
-                    Text("SAVE", style: TextStyle(color: Colors.white))),
-              )),
+          MainButton(
+              text: "SAVE",
+              press: () {
+                SaveInfo(nameController.text, lastNameController.text, path);
+              },
+              backgroundColor: PrimaryColor),
+          Container(
+            margin:  EdgeInsets.symmetric( vertical: 5),
+            child: LightButton(
+              press:() {
+                Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(
+                        builder: (BuildContext context) => HomeScreen()
+                    ),
+                        (Route<dynamic> route) => false);
+              },
+              text:"Close",
+            ),
+          ),
         ],
       ),
     );

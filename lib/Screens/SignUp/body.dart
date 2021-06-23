@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:review_app/Screens/SignUp/profileScreen.dart';
+import 'package:review_app/Screens/Home/homeScreen.dart';
+import 'package:review_app/Screens/Profile/profileScreen.dart';
 import 'package:review_app/constants.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -33,6 +34,9 @@ class _BodyState extends State<Body> {
             _isLoading = false;
             if (JsonData['token'] != null) {
               preferences.setString("token", JsonData['token']);
+              Navigator.pushAndRemoveUntil(context,
+                  MaterialPageRoute(builder: (context) => new HomeScreen()),
+                      (Route<dynamic> route) => false);
               Navigator.push(context,
                   MaterialPageRoute(builder: (context) {
                     return ProfileScreen();
