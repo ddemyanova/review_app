@@ -31,14 +31,4 @@ Future<List<Product>> getProducts() async {
     }
 }
 
-Future <bool> checkConn() async{
-  var connectivityResult = await (Connectivity().checkConnectivity());
-  if (connectivityResult == ConnectivityResult.none) {
-    return false;
-  }
-  else
-    {
-    return true;
-    }
-}
 
