@@ -11,7 +11,7 @@ import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 
 import '../components.dart';
-import 'ProductsData.dart';
+import '../Models/ProductsData.dart';
 class DBProvider {
   DBProvider._();
   static final DBProvider db = DBProvider._();

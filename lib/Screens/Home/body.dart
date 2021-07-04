@@ -6,12 +6,12 @@ import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:review_app/Models/Database.dart';
+import 'package:review_app/DataProvider/Database.dart';
 import 'package:review_app/Models/ProductsData.dart';
 import 'package:review_app/Screens/Home/appBar.dart';
 import 'package:review_app/Screens/Login/loginScreen.dart';
 import 'package:review_app/Screens/Review/reviewScreen.dart';
-import 'package:review_app/Models/Database.dart';
+import 'package:review_app/DataProvider/Database.dart';
 import 'package:review_app/Screens/Welcome/welcome.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../components.dart';
@@ -21,6 +21,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:path_provider/path_provider.dart';
 
 import 'homeScreen.dart';
+import 'package:review_app/checkData.dart';
 class Body extends StatefulWidget {
 
   @override
@@ -29,15 +30,10 @@ class Body extends StatefulWidget {
 
 class _BodyState extends State<Body> {
   bool _isLogged =false;
-
-
-
   @override
   void initState(){
 
     super.initState();
-    _isLogged = false;
-    checklogin();
     checkConn();
 
   }
@@ -85,23 +81,7 @@ class _BodyState extends State<Body> {
       }
     }
     catch(e){
-
     }
-
-    // var response = await Dio().get(
-    //     'https://helpx.adobe.com/content/dam/help/en/stock/how-to/visual-reverse-image-search/jcr_content/main-pars/image/visual-reverse-image-search-v2_intro.jpg',
-    //     options: Options(responseType: ResponseType.bytes));
-    // final result = await ImageGallerySaver.saveImage(
-    //   Uint8List.fromList(response.data),
-    //   quality: 60,
-    //   name: 'file',
-    // );
-    //var imageId = await ImageDownloader.downloadImage("https://raw.githubusercontent.com/wiki/ko2ic/image_downloader/images/flutter.png");
-    // String path =  result['filePath'].toString().replaceFirst('file://', '');
-    // print("res: "+result.toString());
-    //print(imageId);
-    //product.Image=path;
-    //DBProvider.db.newProduct(product);
     setState(() {
     });
   }
@@ -119,17 +99,6 @@ class _BodyState extends State<Body> {
             (Route<dynamic> route) => false);
 
   }
-  void checklogin() async{
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    print(sharedPreferences.getString("token"));
-    if(sharedPreferences.getString("token")!=null) {
-      _isLogged=true;
-    }
-    else {
-      _isLogged=false;
-    }
-  }
-
 
   @override
   Widget build(BuildContext context) {
@@ -142,78 +111,81 @@ class _BodyState extends State<Body> {
            {
              bool _isConnected = false;
              _isConnected= snapshot.data! ;
-            //
+
             return FutureBuilder(
-              future: _isConnected? getProducts(): DBProvider.db.getProductsDB(),
-                builder: (BuildContext context, AsyncSnapshot<List<Product>> snapshot){
-                  if(snapshot.hasData){
-                    List<Product>? products = snapshot.data;
-                    return Stack(
+              future: checkLogin(),
+              builder: (BuildContext context, AsyncSnapshot <bool> snapshot){
+                if(snapshot.hasData)
+                {
+                  _isLogged = snapshot.data!;
 
-                      children: <Widget>[
+                  return FutureBuilder(
 
-                        Positioned(
-                          top: 0,
-                          left: 0,
-                          child: Image.asset("assets/images/bg.jpg"),
-                        ),
-
-                        ListView(
-                          children: products!.map(
-                                  (Product product) => Card(
-
-                                margin: EdgeInsets.all(10.0),
-
-                                child:Column(
-
-                                  children: <Widget>[
-                                    ListTile(
-                                      onTap: () {
-                                        Navigator.push(context,
-                                            MaterialPageRoute(builder: (context) {
-                                              return ReviewScreen(product: product);
-                                            }));
-                                      },
-                                      leading: Container(
-                                        child: _isConnected? Image.network(URL_IMG+product.Image):
-                                        Image.file(File(product.Image)),
-                                      ),
-                                      contentPadding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
-                                      title: Text(product.Title),
-                                      trailing:  IconButton(
-                                        icon: Icon(
-                                            Icons.download_rounded,
-                                            color: (_isLogged & _isConnected)?
-                                            PrimaryColor : Colors.black54),
-                                        onPressed: () {
-                                          if (_isLogged && _isConnected) {
-                                            //DBProvider.db.deleteAll();
-                                            downloadProduct(product);
-                                          }
-                                        },
-
-                                      ),
-
+                      future: _isConnected? getProducts(): DBProvider.db.getProductsDB(),
+                      builder: (BuildContext context, AsyncSnapshot<List<Product>> snapshot){
+                        if(snapshot.hasData){
+                          List<Product>? products = snapshot.data;
+                          return Container(
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                image: AssetImage("assets/images/bg.jpg"),
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                            child:Column(
+                              children: products!.map(
+                                      (Product product) => Card(
+                                    margin: EdgeInsets.all(10.0),
+                                    child:Column(
+                                      children: <Widget>[
+                                        ListTile(
+                                          onTap: () {
+                                            Navigator.push(context,
+                                                MaterialPageRoute(builder: (context) {
+                                                  return ReviewScreen(product: product);
+                                                }));
+                                          },
+                                          leading: Container(
+                                            child: _isConnected? Image.network(URL_IMG+product.Image):
+                                            Image.file(File(product.Image)),
+                                          ),
+                                          contentPadding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+                                          title: Text(product.Title),
+                                          trailing:  IconButton(
+                                            icon: Icon(
+                                                Icons.download_rounded,
+                                                color: (_isLogged & _isConnected)?
+                                                PrimaryColor : Colors.black54),
+                                            onPressed: () {
+                                              if (_isLogged && _isConnected) {
+                                                //DBProvider.db.deleteAll();
+                                                downloadProduct(product);
+                                              }
+                                            },
+                                          ),
+                                        ),
+                                      ],
                                     ),
-
-                                  ],
-                                )   ,
-                                color: PrimaryLightColor,
-                              )
-                          )
-                              .toList(),
-                        ),
-                      ]
-                      ,
-                    );
-                  }
-                  else{
-                    ShowToast("Lost Connection");
-                    return Center(child: CircularProgressIndicator());
-                  }
+                                    color: PrimaryLightColor,
+                                  )
+                              ).toList(),
+                            ),
+                          );
+                        }
+                        else{
+                          ShowToast("Lost Connection");
+                          return Center(child: CircularProgressIndicator());
+                        }
+                      }
+                  );
                 }
+                else
+                {
+                  ShowToast("Lost Connection");
+                  return Center(child: CircularProgressIndicator());
+                }
+              }
             );
-
           }
           else
             {
@@ -222,7 +194,6 @@ class _BodyState extends State<Body> {
             }
         },
       ),
-
     );
   }
 }

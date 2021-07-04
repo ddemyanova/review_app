@@ -1,7 +1,8 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:review_app/Models/Database.dart';
+import 'package:review_app/DataProvider/Database.dart';
+import 'package:review_app/checkData.dart';
 import 'package:review_app/Screens/Profile/profileScreen.dart';
 import 'package:review_app/Screens/Welcome/welcome.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -37,65 +38,69 @@ class _AppBarHomeState extends State<AppBarHome> {
           return ProfileScreen();
         }));
   }
-  void checklogin() async{
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    if(sharedPreferences.getString("token")!=null) {
-      setState(() {
-        _isLogged=true;
-      });
-    }
-    else {
-      setState(() {
-        _isLogged=false;
-      });
-    }
-  }
 
   @override
   void initState(){
-    checklogin();
   }
   @override
   Widget build(BuildContext context) {
-    if(_isLogged)
-    return AppBar(
-          title: Text("Products"),
 
-          actions: [
-            IconButton(
-              onPressed: (){
-                setState(() {
-                  DBProvider.db.deleteAll();
-                });
-              },
-              icon: Icon(
-                  Icons.delete
-              ),
-            ),
-            IconButton(
-              onPressed: (){
-                setState(() {
-                  OpenProfile();
-                });
-              },
-              icon: Icon(
-                  Icons.account_circle
-              ),
-            ),
-            IconButton(
-              onPressed: (){
-                logOut();
-              },
-              icon: Icon(
-                  Icons.login
-              ),
-            )
-          ],
+    return Scaffold(
+      body: FutureBuilder(
+        future:checkLogin(),
+        builder: (BuildContext context, AsyncSnapshot<bool> snapshot){
+          if(snapshot.hasData){
+            _isLogged=snapshot.data!;
+            if(_isLogged)
+            return AppBar(
+
+              title: Text("Products"),
+              actions: [
+                IconButton(
+                  onPressed: (){
+                    setState(() {
+                      DBProvider.db.deleteAll();
+                    });
+                  },
+                  icon: Icon(
+                      Icons.delete
+                  ),
+                ),
+                IconButton(
+                  onPressed: (){
+                    setState(() {
+                      OpenProfile();
+                    });
+                  },
+                  icon: Icon(
+                      Icons.account_circle
+                  ),
+                ),
+                IconButton(
+                  onPressed: (){
+                    logOut();
+                  },
+                  icon: Icon(
+                      Icons.login
+                  ),
+                ),
+              ],
+            );
+            else
+              return AppBar(
+                title: Text("Products"),
+          );
+
+          }
+          else
+            {
+            return AppBar(
+              title: Text("Products"),
+            );
+            }
+        },
+      ),
     );
-    else
-      return AppBar(
-        title: Text("Products"),
-      );
 
   }
 }

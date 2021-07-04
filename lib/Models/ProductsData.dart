@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:review_app/Models/Database.dart';
+import 'package:review_app/DataProvider/Database.dart';
 
 class Product{
   int Id;
