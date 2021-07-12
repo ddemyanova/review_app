@@ -22,7 +22,6 @@ Future<List<Product>> getProducts() async {
     List<dynamic> body = jsonDecode(response.body);
 
     List<Product> products = body.map((dynamic item) => Product.fromJson(item),).toList();
-
     return products;
   }
   else
