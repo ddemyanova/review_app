@@ -1,17 +1,10 @@
-import 'dart:convert';
-import 'dart:ffi';
-import 'dart:typed_data';
 import 'package:dio/dio.dart';
-import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:review_app/DataProvider/Database.dart';
 import 'package:review_app/Models/ProductsData.dart';
-import 'package:review_app/Screens/Home/appBar.dart';
-import 'package:review_app/Screens/Login/loginScreen.dart';
 import 'package:review_app/Screens/Review/reviewScreen.dart';
-import 'package:review_app/DataProvider/Database.dart';
 import 'package:review_app/Screens/Welcome/welcome.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../components.dart';
@@ -19,8 +12,6 @@ import '../../constants.dart';
 import 'getData.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:path_provider/path_provider.dart';
-
-import 'homeScreen.dart';
 import 'package:review_app/checkData.dart';
 class Body extends StatefulWidget {
 
@@ -94,7 +85,7 @@ class _BodyState extends State<Body> {
     preferences.clear();
     Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(
-            builder: (BuildContext context) => Welcome()
+            builder: (BuildContext context) => Welcome(),
         ),
             (Route<dynamic> route) => false);
 

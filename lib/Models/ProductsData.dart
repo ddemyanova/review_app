@@ -1,7 +1,3 @@
-import 'dart:convert';
-
-import 'package:flutter/material.dart';
-import 'package:review_app/DataProvider/Database.dart';
 
 class Product{
   int Id;
@@ -14,8 +10,8 @@ class Product{
     required this.Image,
     required this.Text,
   });
-  factory Product.fromJson(Map<String, dynamic> json) {
 
+  factory Product.fromJson(Map<String, dynamic> json) {
     return Product(
       Id: json['id'] as int,
       Image: json['img'] as String,

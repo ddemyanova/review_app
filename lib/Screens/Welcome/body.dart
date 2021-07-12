@@ -3,7 +3,6 @@ import 'package:review_app/Screens/Home/homeScreen.dart';
 import 'package:review_app/Screens/Login/loginScreen.dart';
 import 'package:review_app/Screens/SignUp/signupScreen.dart';
 import 'package:review_app/constants.dart';
-
 import '../../components.dart';
 
 class Body extends StatelessWidget {
@@ -53,7 +52,6 @@ class Body extends StatelessWidget {
               margin:  EdgeInsets.symmetric( vertical: 5),
               child: LightButton(
                 press:() {
-
                   Navigator.push(context,
                       MaterialPageRoute(builder: (context) {
                         return HomeScreen();
